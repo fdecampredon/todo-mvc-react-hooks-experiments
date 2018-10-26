@@ -41,7 +41,7 @@ const MainSection = ({
             checked={completedCount === todosCount}
             readOnly
           />
-          <label onClick={toggleAllTodo} />
+          <label onClick={() => toggleAllTodo()} />
         </span>
       )}
       <TodoList

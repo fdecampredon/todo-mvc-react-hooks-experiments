@@ -1,70 +1,53 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import Header from "./Header";
 import MainSection from "./MainSection";
+import useReturningState from "./useReturningState";
 
-const useTodos = () => {
-  const [todos, setTodos] = useState([]);
+const initialState = [];
 
-  const addTodo = text => {
-    setTodos([
-      ...todos,
-      {
-        id: todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-        completed: false,
-        text
-      }
-    ]);
-  };
+const addTodo = (text, todos) => [
+  ...todos,
+  {
+    id: todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+    completed: false,
+    text
+  }
+];
 
-  const deleteTodo = id => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
+const deleteTodo = (id, todos) => todos.filter(todo => todo.id !== id);
 
-  const editTodo = (id, text) => {
-    setTodos(todos.map(todo => (todo.id === id ? { ...todo, text } : todo)));
-  };
+const editTodo = (id, text, todos) =>
+  todos.map(todo => (todo.id === id ? { ...todo, text } : todo));
 
-  const toggleTodo = id => {
-    setTodos(
-      todos.map(
-        todo =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
+const toggleTodo = (id, todos) =>
+  todos.map(
+    todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)
+  );
 
-  const toggleAllTodo = () => {
-    const areAllMarked = todos.every(todo => todo.completed);
-    setTodos(
-      todos.map(todo => ({
-        ...todo,
-        completed: !areAllMarked
-      }))
-    );
-  };
+const toggleAllTodo = todos => {
+  const areAllMarked = todos.every(todo => todo.completed);
+  return todos.map(todo => ({
+    ...todo,
+    completed: !areAllMarked
+  }));
+};
 
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
-  };
+const clearCompleted = todos => todos.filter(todo => todo.completed === false);
 
-  return [
-    todos,
-    {
-      addTodo,
-      deleteTodo,
-      editTodo,
-      toggleTodo,
-      toggleAllTodo,
-      clearCompleted
-    }
-  ];
+const actions = {
+  addTodo,
+  deleteTodo,
+  editTodo,
+  toggleTodo,
+  toggleAllTodo,
+  clearCompleted
 };
 
 const App = () => {
   const [
     todos,
     { addTodo, deleteTodo, editTodo, toggleTodo, toggleAllTodo, clearCompleted }
-  ] = useTodos();
+  ] = useReturningState(initialState, actions);
 
   return (
     <div>

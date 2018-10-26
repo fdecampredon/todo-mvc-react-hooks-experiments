@@ -37,7 +37,7 @@ const Footer = ({
         ))}
       </ul>
       {!!completedCount && (
-        <button className="clear-completed" onClick={clearCompleted}>
+        <button className="clear-completed" onClick={() => clearCompleted()}>
           Clear completed
         </button>
       )}
