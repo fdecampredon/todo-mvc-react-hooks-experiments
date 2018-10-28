@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 const useReactiveState = (factory, initialState) => {
   const [state, setState] = useState(initialState);
-  const { events$, state$ } = useMemo(factory, []);
+  const { events$, state$ } = useMemo(() => factory(initialState), []);
   const events = useMemo(
     () =>
       Object.keys(events$).reduce((events, key) => {

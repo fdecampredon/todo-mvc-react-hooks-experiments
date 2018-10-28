@@ -5,7 +5,7 @@ import Header from "./Header";
 import MainSection from "./MainSection";
 import useReactiveState from "./useReactiveState";
 
-const todosIntent = () => {
+const todosIntent = initialState => {
   const addTodo$ = new Subject();
   const deleteTodo$ = new Subject();
   const editTodo$ = new Subject();
@@ -50,7 +50,7 @@ const todosIntent = () => {
     clearCompleted$.pipe(
       map(() => todos => todos.filter(todo => todo.completed === false))
     )
-  ).pipe(scan((todos, operation) => operation(todos), []));
+  ).pipe(scan((todos, operation) => operation(todos), initialState));
 
   return {
     state$: todos$,
